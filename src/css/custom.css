@@ -1,0 +1,98 @@
+/**
+ * Any CSS you add here will be applied to all pages of your Docusaurus site.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+ --ifm-color-primary: #008080; /* teal */
+  --ifm-color-primary-dark: #006d6d;
+  --ifm-color-primary-darker: #005f5f;
+  --ifm-color-primary-darkest: #004c4c;
+  --ifm-color-primary-light: #20a9a9; /* lighter teal */
+  --ifm-color-primary-lighter: #36bdbd; 
+  --ifm-color-primary-lightest: #6edede; /* soft aqua */
+
+  --ifm-code-font-size: 95%;
+  /* Minimalist design: light grayscale for background and text */
+--ifm-background-color: #f4fffc; 
+--ifm-text-color: #1e3d3d;
+--ifm-font-family-base: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Modern, clean font */
+}
+
+html[data-theme='dark'] {
+   --ifm-color-primary: #20c997; /* sea green */
+  --ifm-color-primary-dark: #1aa880;
+  --ifm-color-primary-darker: #168f6f;
+  --ifm-color-primary-darkest: #106b53;
+  --ifm-color-primary-light: #4ddbb0;
+  --ifm-color-primary-lighter: #7feed1;
+  --ifm-color-primary-lightest: #a7f3d0;
+
+  /* Dark mode minimalist colors */
+  --ifm-background-color: #0d1f1f; /* deep teal-black */
+  --ifm-text-color: #d8f3f0;
+}
+
+/* Generous padding for main content areas */
+
+.main-wrapper {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.docMainContainer {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.docItemCol {
+  padding: 20px;
+}
+
+.markdown article {
+  padding: 20px;
+  line-height: 1.8;
+}
+
+/* Ensure headings have consistent spacing */
+.markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  color: var(--ifm-color-primary); /* teal headings */
+}
+
+/* Adjust paragraph spacing */
+.markdown p {
+  margin-bottom: 1em;
+}
+
+/* Code blocks for better readability */
+.theme-code-block {
+  margin: 20px 0;
+  border-radius: 10px;
+  background: #eafafa; /* soft mint for light mode */
+}
+
+html[data-theme='dark'] .theme-code-block {
+  background: #123232 !important; /* deep teal */
+}
+
+/* Navbar */
+.navbar {
+  box-shadow: none;
+  border-bottom: 1px solid var(--ifm-color-primary-lightest);
+  background: var(--ifm-background-color);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-text-color);
+  border-top: 1px solid var(--ifm-color-primary-lightest);
+  padding: 2rem 0;
+}
+
+.footer__title,
+.footer__link-item {
+  color: var(--ifm-text-color);
+}

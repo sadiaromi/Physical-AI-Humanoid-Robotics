@@ -1,0 +1,5 @@
+# example_interfaces/srv/SetJointAngles.srv
+float64[] joint_angles
+---
+bool success
+string message

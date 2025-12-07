@@ -1,0 +1,23 @@
+{
+  "name": "humanoid-robotics-book",
+  "version": "1.0.0",
+  "description": "This repository contains the source for the \"Physical AI & Humanoid Robotics\" textbook, built using Docusaurus.",
+  "main": "docusaurus.config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
+    "prism-react-renderer": "^2.4.1"
+  }
+}

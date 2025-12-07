@@ -1,0 +1,151 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="training_environment_world">
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <model name="box_robot">
+      <pose>0 0 0.5 0 0 0</pose>
+      <link name="base_link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.083</ixx>
+            <iyy>0.083</iyy>
+            <izz>0.083</izz>
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="target_sphere">
+      <pose>3 3 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <sphere>
+              <radius>0.2</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.0 0.0 1.0 1</ambient>
+            <diffuse>0.0 0.0 1.0 1</diffuse>
+            <specular>0.0 0.0 1.0 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <sphere>
+              <radius>0.2</radius>
+            </sphere>
+          </geometry>
+        </collision>
+        <inertial>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.0004</ixx>
+            <iyy>0.0004</iyy>
+            <izz>0.0004</izz>
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+          </inertia>
+        </inertial>
+      </link>
+    </model>
+
+    <model name="obstacle_wall_1">
+      <pose>1 2 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.2 2 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.2 2 1</size>
+            </box>
+          </geometry>
+        </collision>
+        <inertial>
+          <mass>10.0</mass>
+          <inertia>
+            <ixx>1.666</ixx>
+            <iyy>1.666</iyy>
+            <izz>1.666</izz>
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+          </inertia>
+        </inertial>
+      </link>
+    </model>
+
+    <model name="obstacle_wall_2">
+      <pose>2 -1 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2 0.2 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2 0.2 1</size>
+            </box>
+          </geometry>
+        </collision>
+        <inertial>
+          <mass>10.0</mass>
+          <inertia>
+            <ixx>1.666</ixx>
+            <iyy>1.666</iyy>
+            <izz>1.666</izz>
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+          </inertia>
+        </inertial>
+      </link>
+    </model>
+
+  </world>
+</sdf>

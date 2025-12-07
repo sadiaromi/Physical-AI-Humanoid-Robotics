@@ -1,0 +1,21 @@
+# Gitignore for Node.js / Docusaurus project
+# Node.js
+node_modules/
+dist/
+build/
+*.log
+.env*
+
+# Docusaurus specific
+.docusaurus/
+build/
+.docusaurus/
+.cache/
+
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/

@@ -1,6 +1,6 @@
 import sys
 
-from tutorial_interfaces.srv import SetJointAngles
+from example_interfaces.srv import SetJointAngles
 import rclpy
 from rclpy.node import Node
 

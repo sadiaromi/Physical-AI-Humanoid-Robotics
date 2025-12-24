@@ -1,0 +1,299 @@
+openapi: 3.0.3
+info:
+  title: RAG Chatbot API
+  description: API for querying book content using Retrieval Augmented Generation
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+servers:
+  - url: https://api.rag-chatbot.example.com
+    description: Production server
+  - url: http://localhost:8000
+    description: Development server
+paths:
+  /query:
+    post:
+      summary: Query book content
+      description: Submit a question about book content and receive an AI-generated response
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Query
+  /books:
+    post:
+      summary: Ingest a new book
+      description: Upload and process a book for querying
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookIngestionRequest'
+      responses:
+        '202':
+          description: Book ingestion started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookIngestionResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Books
+  /books/{bookId}:
+    get:
+      summary: Get book details
+      description: Retrieve metadata and status for a specific book
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Books
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    QueryRequest:
+      type: object
+      required:
+        - question
+        - book_id
+      properties:
+        question:
+          type: string
+          description: The question to ask about the book content
+          example: "What are the main concepts in chapter 1?"
+        book_id:
+          type: string
+          format: uuid
+          description: The ID of the book to query
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+        selected_text:
+          type: string
+          description: Optional text that the user has selected; if provided, the query will focus only on this text
+          example: "The concept of machine learning is..."
+    QueryResponse:
+      type: object
+      required:
+        - response
+        - sources
+        - query_id
+      properties:
+        response:
+          type: string
+          description: The AI-generated response to the query
+          example: "Chapter 1 introduces the fundamental concepts of machine learning..."
+        sources:
+          type: array
+          items:
+            type: object
+            properties:
+              chunk_id:
+                type: string
+                format: uuid
+                description: The ID of the content chunk used
+              section_title:
+                type: string
+                description: The section title where the content came from
+              page_number:
+                type: integer
+                description: The page number where the content came from
+          description: List of content chunks used to generate the response
+        query_id:
+          type: string
+          format: uuid
+          description: The ID of the query for tracking purposes
+    BookIngestionRequest:
+      type: object
+      required:
+        - file
+        - title
+        - author
+      properties:
+        file:
+          type: string
+          format: binary
+          description: The book file to ingest (PDF, TXT, etc.)
+        title:
+          type: string
+          description: The title of the book
+          example: "Introduction to Machine Learning"
+        author:
+          type: string
+          description: The author of the book
+          example: "Jane Doe"
+        metadata:
+          type: object
+          description: Additional metadata about the book
+          additionalProperties: true
+    BookIngestionResponse:
+      type: object
+      required:
+        - book_id
+        - status
+        - message
+      properties:
+        book_id:
+          type: string
+          format: uuid
+          description: The ID of the book being ingested
+        status:
+          type: string
+          enum: [processing, complete, failed]
+          description: The current status of the ingestion process
+        message:
+          type: string
+          description: A message about the ingestion status
+          example: "Book ingestion started successfully"
+    BookResponse:
+      type: object
+      required:
+        - book_id
+        - title
+        - author
+        - status
+        - created_at
+      properties:
+        book_id:
+          type: string
+          format: uuid
+          description: The unique identifier for the book
+        title:
+          type: string
+          description: The title of the book
+          example: "Introduction to Machine Learning"
+        author:
+          type: string
+          description: The author of the book
+          example: "Jane Doe"
+        isbn:
+          type: string
+          description: The ISBN of the book (if available)
+          example: "978-0-123-45678-9"
+        status:
+          type: string
+          enum: [processing, ready, archived]
+          description: The current status of the book in the system
+        language:
+          type: string
+          description: The language of the book
+          example: "en"
+        created_at:
+          type: string
+          format: date-time
+          description: When the book was first added to the system
+        updated_at:
+          type: string
+          format: date-time
+          description: When the book was last updated
+        metadata:
+          type: object
+          description: Additional metadata about the book
+          additionalProperties: true
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: The error code
+          example: "VALIDATION_ERROR"
+        message:
+          type: string
+          description: A human-readable description of the error
+          example: "The request body is invalid"
+        details:
+          type: object
+          description: Additional details about the error
+          additionalProperties: true
+tags:
+  - name: Query
+    description: Endpoints for querying book content
+  - name: Books
+    description: Endpoints for managing books

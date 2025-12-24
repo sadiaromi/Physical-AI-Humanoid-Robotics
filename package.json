@@ -18,6 +18,7 @@
   "dependencies": {
     "@docusaurus/core": "^3.9.2",
     "@docusaurus/preset-classic": "^3.9.2",
+    "axios": "^1.13.2",
     "prism-react-renderer": "^2.4.1"
   }
 }

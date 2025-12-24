@@ -61,7 +61,7 @@ const config = {
     ({
             navbar: {
               title: 'Physical AI & Humanoid Robotics',
-              
+
               items: [
                 {
                   type: 'docSidebar',

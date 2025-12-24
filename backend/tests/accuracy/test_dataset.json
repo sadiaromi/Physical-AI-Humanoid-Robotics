@@ -1,0 +1,38 @@
+[
+  {
+    "question": "What is the main topic of the book?",
+    "book_id": "test-book-uuid-1",
+    "expected_answer": "The main topic of the book is artificial intelligence and its applications in modern technology.",
+    "category": "basic"
+  },
+  {
+    "question": "Who is the author of this book?",
+    "book_id": "test-book-uuid-1",
+    "expected_answer": "The author of this book is John Smith.",
+    "category": "basic"
+  },
+  {
+    "question": "Explain the machine learning algorithm described in chapter 3.",
+    "book_id": "test-book-uuid-1",
+    "expected_answer": "Chapter 3 describes the Random Forest algorithm, which is an ensemble learning method that operates by constructing multiple decision trees during training and outputs the class that is the mode of the classes for classification or mean prediction for regression.",
+    "category": "detailed"
+  },
+  {
+    "question": "What are the key findings of the research presented in chapter 5?",
+    "book_id": "test-book-uuid-1",
+    "expected_answer": "The key findings in chapter 5 show that the proposed method achieved a 15% improvement in accuracy compared to baseline models, with a significant reduction in computational requirements, making it suitable for deployment on edge devices.",
+    "category": "detailed"
+  },
+  {
+    "question": "Based on the research presented, what might be the implications for future work?",
+    "book_id": "test-book-uuid-1",
+    "expected_answer": "The research suggests that future work could focus on extending the approach to multimodal data, exploring its application in real-time systems, and investigating its robustness under adversarial conditions.",
+    "category": "inference"
+  },
+  {
+    "question": "How would you apply the principles from this book to a different context?",
+    "book_id": "test-book-uuid-1",
+    "expected_answer": "The principles of adaptive learning and ensemble methods could be applied to domains such as healthcare diagnostics, financial forecasting, and autonomous systems, where robustness and accuracy are critical.",
+    "category": "inference"
+  }
+]

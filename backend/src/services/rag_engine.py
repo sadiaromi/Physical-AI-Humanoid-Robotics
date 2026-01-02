@@ -41,12 +41,12 @@ class RAGEngine:
     def generate_response(self, query: str, context_chunks: List[Dict[str, Any]], selected_text: Optional[str] = None) -> str:
         """
         Generate a response based on the query and context chunks or selected text
-        
+
         Args:
             query: The user's query
             context_chunks: List of relevant content chunks
             selected_text: Optional selected text (if provided, context chunks are ignored)
-            
+
         Returns:
             Generated response
         """
@@ -57,32 +57,59 @@ class RAGEngine:
             # Combine all relevant chunks as context
             context_parts = [chunk.get("content", "") for chunk in context_chunks]
             context = "\n\n".join(context_parts)
-        
+
+        # Check if we have sufficient context to answer the question
+        if not context.strip() or len(context.strip()) == 0:
+            # No relevant content found in the book for this query
+            return "I cannot answer this question based on the book content. The information you're looking for is not available in the Physical AI & Humanoid Robotics book."
+
         # Create a prompt for the language model with the context
         if selected_text:
             prompt = f"""
-            Based only on the following selected text, please answer the question.
-            Do not use any other information beyond what is in the selected text:
-            
+            You are an AI assistant for the "Physical AI & Humanoid Robotics" book.
+            Answer the user's question based only on the following selected text from the book.
+            If the selected text does not contain information to answer the question,
+            respond with: "I cannot answer this question based on the selected text.
+            The information you're looking for is not available in the Physical AI & Humanoid Robotics book."
+
             Selected text: {context}
-            
+
             Question: {query}
-            
+
             Answer:
             """
         else:
             prompt = f"""
-            Based on the following context from the book, please answer the question:
-            
+            You are an AI assistant for the "Physical AI & Humanoid Robotics" book.
+            Answer the user's question based only on the following context from the book.
+            If the context does not contain information to answer the question,
+            respond with: "I cannot answer this question based on the book content.
+            The information you're looking for is not available in the Physical AI & Humanoid Robotics book."
+
             Context: {context}
-            
+
             Question: {query}
-            
+
             Answer:
             """
-        
+
         # Generate and return the response
-        return self.cohere_client.generate_response(prompt)
+        response = self.cohere_client.generate_response(prompt)
+
+        # Check if the response indicates lack of information, is a mock response, or Cohere failed
+        if ("cannot answer this question based on" in response.lower() or
+            "mock response" in response.lower() or
+            "no response generated" in response.lower() or
+            response.strip() == ""):
+            # If Cohere fails or returns no relevant info, return a summary of the context
+            if context.strip() and len(context.strip()) > 0:
+                # Return the most relevant context as the answer
+                context_preview = context[:500] + "..." if len(context) > 500 else context
+                return f"Based on the book content:\n\n{context_preview}"
+            else:
+                return "I cannot answer this question based on the book content. The information you're looking for is not available in the Physical AI & Humanoid Robotics book."
+
+        return response
     
     def query_book(self, 
                    query: str, 

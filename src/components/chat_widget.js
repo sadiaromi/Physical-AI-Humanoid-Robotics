@@ -22,13 +22,23 @@ export default function ChatWidget() {
       console.log("Sending message:", currentInput);
 
       // Updated request with proper format and authentication for local backend
+      // Use a specific book ID for the Physical AI & Humanoid Robotics book
       const res = await axios.post("http://localhost:8000/api/v1/query", {
         question: currentInput,
-        book_id: "default-book-id"  // Default book ID
+        book_id: "physical-ai-book"  // Physical AI & Humanoid Robotics book ID
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.REACT_APP_API_KEY || 'your-local-api-key'}`
+          'Authorization': (() => {
+            try {
+              if (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_KEY) {
+                return `Bearer ${process.env.REACT_APP_API_KEY}`;
+              }
+              return 'Bearer your-local-api-key';
+            } catch (e) {
+              return 'Bearer your-local-api-key';
+            }
+          })()
         }
       });
 

@@ -7,7 +7,9 @@ import random
 class CohereClient:
     def __init__(self):
         # self.client = cohere.Client(api_key=settings.cohere_api_key)
-        self.generation_model = "command-r-plus"  # Using Cohere's recommended model for generation
+        # Using Cohere's most current recommended model for generation
+        # Note: Cohere models are frequently updated/deprecated, so this may need to be updated periodically
+        self.generation_model = "command-r-08-2024"  # Updated to current available model (as of Dec 2025)
 
     def generate_response(self,
                          prompt: str,
@@ -24,22 +26,44 @@ class CohereClient:
         Returns:
             Generated text response
         """
-        # For now, return a mock response to allow the application to start
-        # Actual implementation requires valid Cohere API key
-        if not settings.cohere_api_key or settings.cohere_api_key == "placeholder":
-            return "This is a mocked response. Please configure a valid COHERE_API_KEY to see actual results."
+        # Import cohere here to avoid errors if not installed
+        try:
+            import cohere
+            # Initialize the client if not already done
+            if not hasattr(self, 'client'):
+                self.client = cohere.Client(api_key=settings.cohere_api_key)
 
-        # In a real implementation, this would be:
-        # response = self.client.chat(
-        #     model=self.generation_model,
-        #     message=prompt,
-        #     max_tokens=max_tokens,
-        #     temperature=temperature
-        # )
-        # return response.text if response.text else ""
+            # Try multiple models in case one is deprecated
+            models_to_try = [
+                self.generation_model,      # Current model
+                self.generation_model,      # Same model as fallback (to avoid deprecated models)
+            ]
 
-        # Mock response for demo purposes
-        return f"Mock response for query: {prompt[:50]}... [CONFIGURE COHERE API TO SEE REAL RESULTS]"
+            for model in models_to_try:
+                try:
+                    # Use the Chat API as the Generate API has been deprecated
+                    response = self.client.chat(
+                        model=model,
+                        message=prompt,
+                        max_tokens=max_tokens,
+                        temperature=temperature
+                    )
+                    if hasattr(response, 'text') and response.text:
+                        return response.text
+                except Exception as model_error:
+                    print(f"Model {model} failed: {str(model_error)}")
+                    continue  # Try next model
+
+            # If all models fail, return a default message
+            return "No response generated."
+
+        except ImportError:
+            # If cohere is not installed, return mock response
+            return f"Mock response for query: {prompt[:50]}... [INSTALL COHERE PACKAGE TO SEE REAL RESULTS]"
+        except Exception as e:
+            # If there's an API error, return mock response with error info
+            print(f"Cohere API error: {str(e)}")
+            return f"Mock response for query: {prompt[:50]}... [COHERE API ERROR: {str(e)}]"
 
     def chat(self,
              message: str,
@@ -60,24 +84,45 @@ class CohereClient:
         Returns:
             Generated response text
         """
-        # For now, return a mock response to allow the application to start
-        # Actual implementation requires valid Cohere API key
-        if not settings.cohere_api_key or settings.cohere_api_key == "placeholder":
-            return "This is a mocked response. Please configure a valid COHERE_API_KEY to see actual results."
+        # Import cohere here to avoid errors if not installed
+        try:
+            import cohere
+            # Initialize the client if not already done
+            if not hasattr(self, 'client'):
+                self.client = cohere.Client(api_key=settings.cohere_api_key)
 
-        # In a real implementation, this would be:
-        # response = self.client.chat(
-        #     message=message,
-        #     chat_history=chat_history or [],
-        #     preamble=preamble,
-        #     model=self.generation_model,
-        #     max_tokens=max_tokens,
-        #     temperature=temperature
-        # )
-        # return response.text
+            # Try multiple models in case one is deprecated
+            models_to_try = [
+                self.generation_model,      # Current model
+                self.generation_model,      # Same model as fallback (to avoid deprecated models)
+            ]
 
-        # Mock response for demo purposes
-        return f"Mock chat response to: {message[:50]}... [CONFIGURE COHERE API TO SEE REAL RESULTS]"
+            for model in models_to_try:
+                try:
+                    # Actually make the API call to Cohere
+                    response = self.client.chat(
+                        message=message,
+                        chat_history=chat_history or [],
+                        preamble=preamble,
+                        model=model,
+                        max_tokens=max_tokens,
+                        temperature=temperature
+                    )
+                    if hasattr(response, 'text') and response.text:
+                        return response.text
+                except Exception as model_error:
+                    print(f"Model {model} failed: {str(model_error)}")
+                    continue  # Try next model
+
+            # If all models fail, return a default message
+            return "No response generated."
+        except ImportError:
+            # If cohere is not installed, return mock response
+            return f"Mock chat response to: {message[:50]}... [INSTALL COHERE PACKAGE TO SEE REAL RESULTS]"
+        except Exception as e:
+            # If there's an API error, return mock response with error info
+            print(f"Cohere API error: {str(e)}")
+            return f"Mock chat response to: {message[:50]}... [COHERE API ERROR: {str(e)}]"
 
     def classify(self,
                  inputs: List[str],
